@@ -1,0 +1,4 @@
+.build/
+String-Unescape-*.tar.gz
+String-Unescape-*/
+*.BAK
