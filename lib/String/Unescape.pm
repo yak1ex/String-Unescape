@@ -11,12 +11,24 @@ our (@EXPORT_OK) = qw(unescape);
 
 use Carp;
 
+my %map = (
+	t => "\t",
+	n => "\n",
+	r => "\r",
+	f => "\f",
+	b => "\b",
+	a => "\a",
+	e => "\e",
+);
+
 sub unescape
 {
 	shift if @_ && eval { $_[0]->isa(__PACKAGE__); };
 	croak 'No string is given' unless @_;
 	croak 'More than one argument are given' unless @_ == 1;
-	return $_[0];
+	my $ret = $_[0];
+	$ret =~ s/\\([tnrfbae])/$map{$1}/ge;
+	return $ret;
 }
 
 1;
