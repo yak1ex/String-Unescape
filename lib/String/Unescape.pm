@@ -21,6 +21,8 @@ my %map = (
 	e => "\e",
 );
 
+my %mapc = map { chr($_) => chr($_ ^ 0x60) } 97..122;
+
 sub unescape
 {
 	shift if @_ && eval { $_[0]->isa(__PACKAGE__); };
@@ -28,6 +30,7 @@ sub unescape
 	croak 'More than one argument are given' unless @_ == 1;
 	my $ret = $_[0];
 	$ret =~ s/\\([tnrfbae])/$map{$1}/ge;
+	$ret =~ s/\\c(.)/exists $mapc{$1} ? $mapc{$1} : chr(ord($1) ^ 0x40)/gse;
 	return $ret;
 }
 
