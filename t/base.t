@@ -4,6 +4,7 @@ use Test::Exception;
 my @case;
 push @case, ['\t\n\r\f\b\a\e', 'constant one chars'];
 push @case, [join('', map { '\c'.chr($_) } 0..33,35..127), 'control chars']; # Excluding "
+push @case, [join('', map { '\x{'.$_.'}' } qw(A AA AAA AAAA AAAAA AAAAAA AAAAAAA AAAAAAAA AxA)), '\x{}'];
 
 plan tests => 1 + 2 * @case;
 
