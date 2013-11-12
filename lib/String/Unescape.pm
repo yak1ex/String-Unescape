@@ -33,6 +33,7 @@ sub unescape
 	$ret =~ s/\\c(.)/exists $mapc{$1} ? $mapc{$1} : chr(ord($1) ^ 0x40)/gse;
 	$ret =~ s/\\x\{([0-9a-fA-F]*)[^}]*\}/chr(hex($1))/ge;
 	$ret =~ s/\\x([0-9a-fA-F]{0,2})/chr(hex($1))/ge;
+	$ret =~ s/\\([0-7]{1,3})/chr(oct($1))/ge;
 	return $ret;
 }
 
