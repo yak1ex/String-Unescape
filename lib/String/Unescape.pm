@@ -34,6 +34,8 @@ sub unescape
 	$ret =~ s/\\x\{([0-9a-fA-F]*)[^}]*\}/chr(hex($1))/ge;
 	$ret =~ s/\\x([0-9a-fA-F]{0,2})/chr(hex($1))/ge;
 	$ret =~ s/\\([0-7]{1,3})/chr(oct($1))/ge;
+
+	$ret =~ s/\\l(.?)/lcfirst($1)/ge;
 	return $ret;
 }
 
