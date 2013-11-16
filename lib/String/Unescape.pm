@@ -36,7 +36,7 @@ sub unescape
 	$ret =~ s/\\([0-7]{1,3})/chr(oct($1))/ge;
 	$ret =~ s/\\o\{([0-7]*)[^}]*\}/chr(oct($1))/ge;
 
-	$ret =~ s/\\l(.?)/lcfirst($1)/ge;
+	$ret =~ s/\\(l|u)(.?)/$1 eq 'l' ? lcfirst($2) : ucfirst($2)/ge;
 	return $ret;
 }
 
