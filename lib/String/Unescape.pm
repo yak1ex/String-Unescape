@@ -40,7 +40,7 @@ my $convert = sub {
 	return chr(hex($4)) if defined $4;
 	return chr(oct($5)) if defined $5;
 	return chr(oct($6)) if defined $6 && $^V ge v5.14.0;
-	return 'o{'.$6.$7.'}' if defined $6 && $^V ge v5.14.0;
+	return 'o{'.$6.$7.'}' if defined $6;
 	return $convs{$8}($9) if defined $8;
 	return $convp{$10}($11) if defined $10;
 	return $12;
