@@ -33,21 +33,42 @@ my %convp = (
 	U => sub { uc shift },
 );
 
+my $convert = sub {
+	return $map{$1} if defined $1;
+	return exists $mapc{$2} ? $mapc{$2} : chr(ord($2) ^ 0x40) if defined $2;
+	return chr(hex($3)) if defined $3;
+	return chr(hex($4)) if defined $4;
+	return chr(oct($5)) if defined $5;
+	return chr(oct($6)) if defined $6 && $^V ge v5.14.0;
+	return 'o{'.$6.$7.'}' if defined $6 && $^V ge v5.14.0;
+	return $convs{$8}($9) if defined $8;
+	return $convp{$10}($11) if defined $10;
+	return $12;
+};
+
 sub unescape
 {
 	shift if @_ && eval { $_[0]->isa(__PACKAGE__); };
 	croak 'No string is given' unless @_;
 	croak 'More than one argument are given' unless @_ == 1;
 	my $ret = $_[0];
-	$ret =~ s/\\([tnrfbae])/$map{$1}/ge;
-	$ret =~ s/\\c(.)/exists $mapc{$1} ? $mapc{$1} : chr(ord($1) ^ 0x40)/gse;
-	$ret =~ s/\\x\{([0-9a-fA-F]*)[^}]*\}/chr(hex($1))/ge;
-	$ret =~ s/\\x([0-9a-fA-F]{0,2})/chr(hex($1))/ge;
-	$ret =~ s/\\([0-7]{1,3})/chr(oct($1))/ge;
-	$ret =~ s/\\o\{([0-7]*)[^}]*\}/chr(oct($1))/ge if $^V ge v5.14.0;
+	while($ret =~ s/\G
+		\\([tnrfbae]) |                  # $1 : one char
+		\\c(.) |                         # $2 : control
+		\\x\{([0-9a-fA-F]*)[^}]*\} |     # $3 : \x{}
+		\\x([0-9a-fA-F]{0,2}) |          # $4 : \x
+		\\([0-7]{1,3}) |                 # $5 : \077
+		\\o\{([0-7]*)([^}]*)\} |         # $6, $7 : \o{}
 
-	$ret =~ s/\\(l|u)(.?)/$convs{$1}($2)/ge;
-	$ret =~ s/\\(L|U)(.*?)(?:\\E|\Z)/$convp{$1}($2)/ge;
+		\\(l|u)(.?) |                    # $8, $9 : \l, \u
+		\\(L|U)(.*?)(?:\\E|\Z) |         # $10, $11 : \L, \U, \E
+
+		\\?(.)                           # $12
+
+		/$convert->()/gxse) {
+		last unless defined pos($ret)
+	}
+
 	return $ret;
 }
 
