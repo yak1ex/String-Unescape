@@ -24,13 +24,13 @@ my %map = (
 my %mapc = map { chr($_) => chr($_ ^ 0x60) } 97..122;
 
 my %convs = (
-	l => \&lcfirst,
-	u => \&ucfirst,
+	l => sub { lcfirst shift },
+	u => sub { ucfirst shift },
 );
 
 my %convp = (
-	L => \&lc,
-	U => \&uc,
+	L => sub { lc shift },
+	U => sub { uc shift },
 );
 
 sub unescape
