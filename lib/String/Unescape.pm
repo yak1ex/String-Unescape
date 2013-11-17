@@ -44,7 +44,7 @@ sub unescape
 	$ret =~ s/\\x\{([0-9a-fA-F]*)[^}]*\}/chr(hex($1))/ge;
 	$ret =~ s/\\x([0-9a-fA-F]{0,2})/chr(hex($1))/ge;
 	$ret =~ s/\\([0-7]{1,3})/chr(oct($1))/ge;
-	$ret =~ s/\\o\{([0-7]*)[^}]*\}/chr(oct($1))/ge;
+	$ret =~ s/\\o\{([0-7]*)[^}]*\}/chr(oct($1))/ge if $^V ge v5.14.0;
 
 	$ret =~ s/\\(l|u)(.?)/$convs{$1}($2)/ge;
 	$ret =~ s/\\(L|U)(.*?)(?:\\E|\Z)/$convp{$1}($2)/ge;
