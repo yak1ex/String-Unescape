@@ -23,6 +23,16 @@ my %map = (
 
 my %mapc = map { chr($_) => chr($_ ^ 0x60) } 97..122;
 
+my %convs = (
+	l => \&lcfirst,
+	u => \&ucfirst,
+);
+
+my %convp = (
+	L => \&lc,
+	U => \&uc,
+);
+
 sub unescape
 {
 	shift if @_ && eval { $_[0]->isa(__PACKAGE__); };
@@ -36,8 +46,8 @@ sub unescape
 	$ret =~ s/\\([0-7]{1,3})/chr(oct($1))/ge;
 	$ret =~ s/\\o\{([0-7]*)[^}]*\}/chr(oct($1))/ge;
 
-	$ret =~ s/\\(l|u)(.?)/$1 eq 'l' ? lcfirst($2) : ucfirst($2)/ge;
-	$ret =~ s/\\(L|U)(.*?)(?:\\E|\Z)/$1 eq 'L' ? lc($2) : uc($2)/ge;
+	$ret =~ s/\\(l|u)(.?)/$convs{$1}($2)/ge;
+	$ret =~ s/\\(L|U)(.*?)(?:\\E|\Z)/$convp{$1}($2)/ge;
 	return $ret;
 }
 
