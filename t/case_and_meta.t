@@ -4,9 +4,9 @@ use Test::Exception;
 my @case;
 push @case, ['ABC\lABC\labc\l', '\l'];
 push @case, ['ABC\uABC\uabc\u', '\u'];
+push @case, ['ABC\LABC\Eabc\Labc\EABC\LABC', '\L'];
 
 # TODO: excerpt from perlop
-# \L          lowercase all characters till \E seen
 # \U          uppercase all characters till \E seen
 # \Q          quote non-word characters till \E
 # \E          end either case modification or quoted section
