@@ -34,6 +34,13 @@ my %convp = (
 	Q => sub { quotemeta shift },
 );
 
+if($^V ge v5.16.0) {
+	# All constant stringy eval so this should be safe.
+	eval q{use feature qw(fc); $convp{F} = sub { fc(shift) };}; ## no critic (ProhibitStringyEval)
+} else {
+	$convp{F} = sub { 'F'.shift }; # \E omitted
+}
+
 my $convert = sub {
 	return $map{$1} if defined $1;
 	return exists $mapc{$2} ? $mapc{$2} : chr(ord($2) ^ 0x40) if defined $2;
@@ -62,7 +69,7 @@ sub unescape
 		\\o\{([0-7]*)([^}]*)\} |         # $6, $7 : \o{}
 
 		\\(l|u)(.?) |                    # $8, $9 : \l, \u
-		\\([LUQ])(.*?)(?:\\E|\Z) |         # $10, $11 : \L, \U, \Q, \E
+		\\([LUQF])(.*?)(?:\\E|\Z) |      # $10, $11 : \L, \U, \Q, \F, \E
 
 		\\?(.)                           # $12
 
