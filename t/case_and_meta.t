@@ -8,6 +8,10 @@ push @case, ['ABC\LABC\Eabc\Labc\EABC\LABC', '\L'];
 push @case, ['ABC\UABC\Eabc\Uabc\EABC\Uabc', '\U'];
 push @case, ['[]\Q[]\E[]\Q[]\E[]\Q[]', '\Q'];
 
+# TODO: excerpt from perlop
+# [Since v5.16]
+# \F          foldcase all characters till \E or end of string
+
 plan tests => 1 + 2 * @case;
 
 use_ok 'String::Unescape';
