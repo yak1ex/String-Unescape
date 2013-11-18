@@ -31,6 +31,7 @@ my %convs = (
 my %convp = (
 	L => sub { lc shift },
 	U => sub { uc shift },
+	Q => sub { quotemeta shift },
 );
 
 my $convert = sub {
@@ -61,7 +62,7 @@ sub unescape
 		\\o\{([0-7]*)([^}]*)\} |         # $6, $7 : \o{}
 
 		\\(l|u)(.?) |                    # $8, $9 : \l, \u
-		\\(L|U)(.*?)(?:\\E|\Z) |         # $10, $11 : \L, \U, \E
+		\\([LUQ])(.*?)(?:\\E|\Z) |         # $10, $11 : \L, \U, \Q, \E
 
 		\\?(.)                           # $12
 
