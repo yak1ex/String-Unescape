@@ -7,10 +7,8 @@ push @case, ['ABC\uABC\uabc\u', '\u'];
 push @case, ['ABC\LABC\Eabc\Labc\EABC\LABC', '\L'];
 push @case, ['ABC\UABC\Eabc\Uabc\EABC\Uabc', '\U'];
 push @case, ['[]\Q[]\E[]\Q[]\E[]\Q[]', '\Q'];
-
-# TODO: excerpt from perlop
-# [Since v5.16]
-# \F          foldcase all characters till \E or end of string
+# [from 5.16]
+push @case, ['ABC\FABC\Eabc\Fabc\EABC\FABC', '\F'];
 
 plan tests => 1 + 2 * @case;
 
