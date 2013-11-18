@@ -6,11 +6,7 @@ push @case, ['ABC\lABC\labc\l', '\l'];
 push @case, ['ABC\uABC\uabc\u', '\u'];
 push @case, ['ABC\LABC\Eabc\Labc\EABC\LABC', '\L'];
 push @case, ['ABC\UABC\Eabc\Uabc\EABC\Uabc', '\U'];
-
-# TODO: excerpt from perlop
-# \Q          quote non-word characters till \E
-# \E          end either case modification or quoted section
-#             (whichever was last seen)
+push @case, ['[]\Q[]\E[]\Q[]\E[]\Q[]', '\Q'];
 
 plan tests => 1 + 2 * @case;
 
