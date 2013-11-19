@@ -41,7 +41,18 @@ if($^V ge v5.16.0) {
 	$convp{F} = sub { 'F'.shift }; # \E omitted
 }
 
+my ($from_name, $from_code);
+if($^V ge v5.14.0) {
+	$from_name = sub { charnames::string_vianame(shift) };
+	$from_code = sub { charnames::string_vianame(charnames::viacode(shift)) };
+} else {
+	$from_name = sub { chr(charnames::vianame(shift)) };
+	$from_code = sub { chr(hex(shift)) };
+}
+
 my $convert = sub {
+	require charnames if defined $8 || defined $9;
+
 	return $map{$1} if defined $1;
 	return exists $mapc{$2} ? $mapc{$2} : chr(ord($2) ^ 0x40) if defined $2;
 	return chr(hex($3)) if defined $3;
@@ -49,9 +60,12 @@ my $convert = sub {
 	return chr(oct($5)) if defined $5;
 	return chr(oct($6)) if defined $6 && $^V ge v5.14.0;
 	return 'o{'.$6.$7.'}' if defined $6;
-	return $convs{$8}($9) if defined $8;
-	return $convp{$10}($11) if defined $10;
-	return $12;
+# TODO: Need to check invalid cases
+	return $from_code->($8) if defined $8;
+	return $from_name->($9) if defined $9;
+	return $convs{$10}($11) if defined $10;
+	return $convp{$12}($13) if defined $12;
+	return $14;
 };
 
 sub unescape
@@ -67,11 +81,13 @@ sub unescape
 		\\x([0-9a-fA-F]{0,2}) |          # $4 : \x
 		\\([0-7]{1,3}) |                 # $5 : \077
 		\\o\{([0-7]*)([^}]*)\} |         # $6, $7 : \o{}
+		\\N\{U\+([^}]*)\} |              # $8 : \N{U+}
+		\\N\{([^}]*)\} |                 # $9 : \N{name}
 
-		\\(l|u)(.?) |                    # $8, $9 : \l, \u
-		\\([LUQF])(.*?)(?:\\E|\Z) |      # $10, $11 : \L, \U, \Q, \F, \E
+		\\(l|u)(.?) |                    # $10, $11 : \l, \u
+		\\([LUQF])(.*?)(?:\\E|\Z) |      # $12, $13 : \L, \U, \Q, \F, \E
 
-		\\?(.)                           # $12
+		\\?(.)                           # $14
 
 		/$convert->()/gxse) {
 		last unless defined pos($ret)
