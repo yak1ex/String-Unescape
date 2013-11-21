@@ -7,6 +7,7 @@ push @case, ['ABC\uABC\uabc\u', '\u'];
 push @case, ['ABC\LABC\Eabc\Labc\EABC\LABC', '\L'];
 push @case, ['ABC\UABC\Eabc\Uabc\EABC\Uabc', '\U'];
 push @case, ['[]\Q[]\E[]\Q[]\E[]\Q[]', '\Q'];
+push @case, ['[ABC]\Q[abc]\U[ABC]\L[abc][A\lBC]\E[a\ubc]\E[ABC]\E[abc]', 'nested \Q, \L, \U'];
 # [from 5.16]
 push @case, ['ABC\FABC\Eabc\Fabc\EABC\FABC', '\F'];
 
