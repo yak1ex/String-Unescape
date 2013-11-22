@@ -50,7 +50,21 @@ if($^V ge v5.14.0) {
 	$from_code = sub { chr(hex(shift)) };
 }
 
-my $convert = sub {
+my $re_single = qr/
+	\\([tnrfbae]) |                  # $1 : one char
+	\\c(.) |                         # $2 : control
+	\\x\{([0-9a-fA-F]*)[^}]*\} |     # $3 : \x{}
+	\\x([0-9a-fA-F]{0,2}) |          # $4 : \x
+	\\([0-7]{1,3}) |                 # $5 : \077
+	\\o\{([0-7]*)([^}]*)\} |         # $6, $7 : \o{}
+	\\N\{U\+([^}]*)\} |              # $8 : \N{U+}
+	\\N\{([^}]*)\} |                 # $9 : \N{name}
+
+	\\(l|u)(.?) |                    # $10, $11 : \l, \u
+	\\?(.)                           # $12
+/xs;
+
+my $convert_single = sub {
 	require charnames if defined $8 || defined $9;
 
 	return $map{$1} if defined $1;
@@ -64,8 +78,52 @@ my $convert = sub {
 	return $from_code->($8) if defined $8;
 	return $from_name->($9) if defined $9;
 	return $convs{$10}($11) if defined $10;
-	return $convp{$12}($13) if defined $12;
-	return $14;
+	return $12;
+};
+
+my $apply_single = sub {
+	my $target = shift;
+	while($target =~ s/\G$re_single/$convert_single->()/gxse) {
+		last unless defined pos($target);
+	}
+	return $target;
+};
+
+# NOTE: I'm not sure the reason, but my $_re_recur; causes a error.
+our $_re_recur;
+$_re_recur = qr/
+	\\([LUQF])
+	(?:(?>(?:[^\\]|\\[^LUQFE])+)|(??{$_re_recur}))*
+	(?:\\E|\Z)
+/xs;
+
+my $re_range = qr/
+	((?:[^\\]|\\[^LUQF])*)                                # $1: pre
+	(?:
+		\\([LUQF])                                        # $2: marker
+		((?:(?>(?:[^\\]|\\[^LUQFE])+)|(??{$_re_recur}))*)  # $3: content
+		(?:\\E|\Z)
+	)*
+/xs;
+
+my $apply_range;
+
+my $convert_range = sub {
+	my ($pre, $marker, $content) = @_;
+#print "P: $pre M: $marker C: $content\n";
+	return
+		(defined $pre ? $apply_single->($pre) : '').
+		(defined $marker ? $convp{$marker}($apply_range->($content)) : '');
+};
+
+$apply_range = sub {
+	my $target = shift;
+#print 'TARGET: ', $target, "\n";
+	while($target =~ s/\G$re_range/$convert_range->($1, $2, $3)/gxse) {
+		last unless defined pos($target);
+	}
+#print 'RETARGET: ', $target, "\n";
+	return $target;
 };
 
 sub unescape
@@ -73,27 +131,8 @@ sub unescape
 	shift if @_ && eval { $_[0]->isa(__PACKAGE__); };
 	croak 'No string is given' unless @_;
 	croak 'More than one argument are given' unless @_ == 1;
-	my $ret = $_[0];
-	while($ret =~ s/\G
-		\\([tnrfbae]) |                  # $1 : one char
-		\\c(.) |                         # $2 : control
-		\\x\{([0-9a-fA-F]*)[^}]*\} |     # $3 : \x{}
-		\\x([0-9a-fA-F]{0,2}) |          # $4 : \x
-		\\([0-7]{1,3}) |                 # $5 : \077
-		\\o\{([0-7]*)([^}]*)\} |         # $6, $7 : \o{}
-		\\N\{U\+([^}]*)\} |              # $8 : \N{U+}
-		\\N\{([^}]*)\} |                 # $9 : \N{name}
 
-		\\(l|u)(.?) |                    # $10, $11 : \l, \u
-		\\([LUQF])(.*?)(?:\\E|\Z) |      # $12, $13 : \L, \U, \Q, \F, \E
-
-		\\?(.)                           # $14
-
-		/$convert->()/gxse) {
-		last unless defined pos($ret)
-	}
-
-	return $ret;
+	return $apply_range->($_[0]);
 }
 
 1;
