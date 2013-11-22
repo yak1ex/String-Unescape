@@ -9,6 +9,7 @@ push @case, ['ABC\UABC\Eabc\Uabc\EABC\Uabc', '\U'];
 push @case, ['[]\Q[]\E[]\Q[]\E[]\Q[]', '\Q'];
 push @case, ['[ABC]\Q[abc]\U[ABC]\L[abc][A\lBC]\E[a\ubc]\E[ABC]\E[abc]', 'nested \Q, \L, \U'];
 push @case, ['[ABC]\Q[abc]\U[ABC][abc]\E[ABC]\E[abc]', 'nested \Q, \U'];
+push @case, ['This \Qquoting \ubusiness \Uhere isn\'t quite\E done yet,\E is it?', 'nested \Q and \E from perlop'];
 # [from 5.16]
 push @case, ['ABC\FABC\Eabc\Fabc\EABC\FABC', '\F'];
 
