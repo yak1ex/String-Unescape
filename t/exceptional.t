@@ -3,11 +3,12 @@ use Test::Exception;
 
 #use charnames qw(:full);
 
-my @case;
-push @case, ['\Etest\Etest\E', 'unmatched \E'];
-push @case, ['test\Utest\Etest\Etest\Utest\Etest', 'unmatched \E with \L, \E'];
-push @case, ['\N{NONEXISTENT NAME}', 'nonexistent name', qr/Unknown charname NONEXISTENT NAME/];
-push @case, ['\N{U+20FFFF}', 'codepoint over U+10FFFF'];
+my @case = (
+    ['\Etest\Etest\E', 'unmatched \E'],
+    ['test\Utest\Etest\Etest\Utest\Etest', 'unmatched \E with \L, \E'],
+    ['\N{NONEXISTENT NAME}', 'nonexistent name', qr/Unknown charname NONEXISTENT NAME/],
+    ['\N{U+20FFFF}', 'codepoint over U+10FFFF'],
+);
 
 plan tests => 1 + 2 * @case;
 

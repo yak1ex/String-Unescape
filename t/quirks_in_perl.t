@@ -1,7 +1,7 @@
 use Test::More;
 use Test::Exception;
 
-my @case;
+my @case = (
 # 1)
 #
 # \L in \U, and vice versa, are not stacked.
@@ -9,12 +9,13 @@ my @case;
 # All \Q, \L, \U and \F (if available) modifiers from the prior \L, \U or \F become to have no effect
 # then restart the new \L, \U or \F conversion. By this module, stacked.
 # For example, "\LA\Ua\LA\Ea\EA\E" produces 'aAaaA' by Perl and 'aaaaa' by this module.
-push @case, ['[ABC]\Q[abc]\U[ABC]\L[abc][A\lBC]\E[a\ubc]\E[ABC]\E[abc]', 'nested \L and \U'];
+    ['[ABC]\Q[abc]\U[ABC]\L[abc][A\lBC]\E[a\ubc]\E[ABC]\E[abc]', 'nested \L and \U'],
 
 # 2)
 #
 # \L\u is converted as \u\L, and \U\l as \l\U.
-push @case, ['\L\uBBBB\EaAaA\U\lCCCC\EaAaA', '\L\u and \U\l'];
+    ['\L\uBBBB\EaAaA\U\lCCCC\EaAaA', '\L\u and \U\l'],
+);
 
 plan tests => 1 + 2 * @case;
 
