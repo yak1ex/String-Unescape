@@ -41,13 +41,21 @@ if($^V ge v5.16.0) {
 	$convp{F} = sub { 'F'.shift }; # \E omitted
 }
 
-my ($from_name, $from_code);
+my $from_code = sub { chr(hex(shift)); };
+my $from_name;
+
 if($^V ge v5.14.0) {
-	$from_name = sub { charnames::string_vianame(shift) };
-	$from_code = sub { charnames::string_vianame(charnames::viacode(shift)) };
+	$from_name = sub {
+		my $name = shift;
+		return charnames::string_vianame($name) || die "Unknown charname $name";
+	};
 } else {
-	$from_name = sub { chr(charnames::vianame(shift)) };
-	$from_code = sub { chr(hex(shift)) };
+	$from_name = sub {
+		my $name = shift;
+		my $code = charnames::vianame($name);
+		die "Unknown charname $name" if ! defined $code;
+		return chr($code);
+	};
 }
 
 my $re_single = qr/
