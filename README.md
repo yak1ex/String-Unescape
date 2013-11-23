@@ -25,27 +25,16 @@ This module provides just one function, Perl's unescaping without variable inter
 `eval` can handle this situation but it has too more power than required. This is the purpose for this module.
 
 This module is intented to be compatible with Perl's native unescaping as much as possible, with the following limitation.
-After the feature complete, if the result is different from one by Perl beyond the limitation, it is considered as a bug.
+If the result is different from one by Perl beyond the limitation, it is considered as a bug. Please report it.
 
 ## LIMITATION
 
 There are the following exceptions that Perl's behavior is not emulated.
 
-- 1
-
-    Whether warning is produced or not.
-
-- 2
-
-    Strings that perl doesn't accept. For those strings, the results by this module are undefined.
-
-- 3
-
-    \\L in \\U and \\U in \\L. By perl, they are not stacked, which means all \\Q, \\L, \\U and \\F (if available) modifiers from the prior \\L, \\U or \\F become to have no effect then restart the new \\L, \\U or \\F conversion. By this module, stacked.
-
-- 4
-
-    \\L\\u and \\U\\l. By Perl, they are swapped as \\u\\L and \\l\\U, respectively. By this module, not swapped.
+1. Whether warning is produced or not.
+2. Strings that perl doesn't accept. For those strings, the results by this module are undefined.
+3. \\L in \\U and \\U in \\L. By perl, they are not stacked, which means all \\Q, \\L, \\U and \\F (if available) modifiers from the prior \\L, \\U or \\F become to have no effect then restart the new \\L, \\U or \\F conversion. By this module, stacked.
+4. \\L\\u and \\U\\l. By Perl, they are swapped as \\u\\L and \\l\\U, respectively. By this module, not swapped.
 
 For 3 and 4, t/quirks\_in\_perl.t contains actual examples.
 
@@ -53,7 +42,7 @@ For 3 and 4, t/quirks\_in\_perl.t contains actual examples.
 
 ## `unescape($str)`
 
-Returns unescaped `$str`. For escaping, see ["Quote-and-Quote-like-Operators" in perlop](http://search.cpan.org/perldoc?perlop#Quote-and-Quote-like-Operators).
+Returns unescaped `$str`. For escaping, see ["Quote-and-Quote-like-Operators" in perlop](https://metacpan.org/pod/perlop#Quote-and-Quote-like-Operators).
 
 # AUTHOR
 

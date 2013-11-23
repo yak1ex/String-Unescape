@@ -15,14 +15,14 @@ use_ok 'String::Unescape';
 
 foreach my $str (@case) {
 # At least, perl 5.8.9 requires 'use charnames qw(:full)' in each eval
-	if(defined $str->[2]) {
-		throws_ok { String::Unescape::unescape($str->[0]); } $str->[2], $str->[1];
-		throws_ok { String::Unescape->unescape($str->[0]); } $str->[2], $str->[1];
-	} else {
-		my $expected = eval "use charnames qw(:full); \"$str->[0]\"";
-		my $got = String::Unescape::unescape($str->[0]);
-		is($got, $expected, "func: $str->[1]");
-		$got = String::Unescape->unescape($str->[0]);
-		is($got, $expected, "class method: $str->[1]");
-	}
+    if(defined $str->[2]) {
+        throws_ok { String::Unescape::unescape($str->[0]); } $str->[2], $str->[1];
+        throws_ok { String::Unescape->unescape($str->[0]); } $str->[2], $str->[1];
+    } else {
+        my $expected = eval "use charnames qw(:full); \"$str->[0]\"";
+        my $got = String::Unescape::unescape($str->[0]);
+        is($got, $expected, "func: $str->[1]");
+        $got = String::Unescape->unescape($str->[0]);
+        is($got, $expected, "class method: $str->[1]");
+    }
 }

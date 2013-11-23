@@ -23,9 +23,9 @@ use_ok 'String::Unescape';
 local $TODO = 'They are quirks in perl, maybe surprising people, except for perl hackers';
 
 foreach my $str (@case) {
-	my $expected = eval "\"$str->[0]\"";
-	my $got = String::Unescape::unescape($str->[0]);
-	is($got, $expected, "func: $str->[1]");
-	$got = String::Unescape->unescape($str->[0]);
-	is($got, $expected, "class method: $str->[1]");
+    my $expected = eval "\"$str->[0]\"";
+    my $got = String::Unescape::unescape($str->[0]);
+    is($got, $expected, "func: $str->[1]");
+    $got = String::Unescape->unescape($str->[0]);
+    is($got, $expected, "class method: $str->[1]");
 }
