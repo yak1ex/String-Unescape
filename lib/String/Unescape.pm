@@ -61,6 +61,7 @@ my $re_single = qr/
 	\\N\{([^}]*)\} |                 # $9 : \N{name}
 
 	\\(l|u)(.?) |                    # $10, $11 : \l, \u
+	\\E |                            #
 	\\?(.)                           # $12
 /xs;
 
@@ -78,7 +79,8 @@ my $convert_single = sub {
 	return $from_code->($8) if defined $8;
 	return $from_name->($9) if defined $9;
 	return $convs{$10}($11) if defined $10;
-	return $12;
+	return $12 if defined $12;
+	return ''; # \E
 };
 
 my $apply_single = sub {
