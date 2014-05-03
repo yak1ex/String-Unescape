@@ -183,4 +183,8 @@ For 3 and 4, t/quirks_in_perl.t contains actual examples.
 
 Returns unescaped C<$str>. For escaping, see L<perlop/Quote-and-Quote-like-Operators>.
 
+=head1 REMARKS
+
+L<charnames> in Perl 5.6 does not have required functionality that is Unicode name E<lt>-E<gt> code conversion in runtime, thus Perl 5.6 support is explicitly dropped.
+
 =cut
