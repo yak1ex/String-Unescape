@@ -44,6 +44,10 @@ For 3 and 4, t/quirks\_in\_perl.t contains actual examples.
 
 Returns unescaped `$str`. For escaping, see ["Quote-and-Quote-like-Operators" in perlop](https://metacpan.org/pod/perlop#Quote-and-Quote-like-Operators).
 
+# REMARKS
+
+[charnames](https://metacpan.org/pod/charnames) in Perl 5.6 does not have required functionality that is Unicode name <-> code conversion in runtime, thus Perl 5.6 support is explicitly dropped.
+
 # AUTHOR
 
 Yasutaka ATARASHI <yakex@cpan.org>
