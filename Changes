@@ -2,5 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+v0.0.2    2014-05-10 00:10:41JST+0900 Asia/Tokyo
+    [Non-functional changes]
+        - Adapt tests to the change of Perl-5.19.9 to prohibit \c{ (rt.cpan.org#95224, gh-6).
+
 v0.0.1    2013-11-24 00:59:35 Asia/Tokyo
     - Initial release.
