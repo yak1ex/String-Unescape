@@ -46,7 +46,7 @@ Returns unescaped `$str`. For escaping, see ["Quote-and-Quote-like-Operators" in
 
 # REMARKS
 
-[charnames](https://metacpan.org/pod/charnames) in Perl 5.6 does not have required functionality that is Unicode name <\-> code conversion in runtime, thus Perl 5.6 support is explicitly dropped.
+[charnames](https://metacpan.org/pod/charnames) in Perl 5.6 does not have required functionality that is Unicode name <-> code conversion in runtime, thus Perl 5.6 support is explicitly dropped.
 
 # AUTHOR
 
