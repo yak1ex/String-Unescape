@@ -5,7 +5,7 @@ use Test::Exception;
 
 # See rt#95224 or gh-6
 # Excluding ", and ; if necessary
-my @cchar = $^V lt v5.19.9 ? (0..33,35..127) : (0.33,35..122,124..127);
+my @cchar = $^V lt v5.19.9 ? (0..33,35..127) : (0..33,35..122,124..127);
 
 my @case = (
     ['\t\n\r\f\b\a\e', 'constant one chars'],
