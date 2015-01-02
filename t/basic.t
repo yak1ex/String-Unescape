@@ -27,6 +27,7 @@ use_ok 'String::Unescape';
 foreach my $str (@case) {
 # At least, perl 5.8.9 requires 'use charnames qw(:full)' in each eval
     my $expected = eval "use charnames qw(:full); \"$str->[0]\"";
+    diag $@ if $@;
     my $got = String::Unescape::unescape($str->[0]);
     is($got, $expected, "func: $str->[1]");
     $got = String::Unescape->unescape($str->[0]);
