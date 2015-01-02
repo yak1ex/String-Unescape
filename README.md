@@ -4,7 +4,7 @@ String::Unescape - Unescape perl-escaped string
 
 # VERSION
 
-version v0.0.2
+version v0.0.3
 
 # SYNOPSIS
 
