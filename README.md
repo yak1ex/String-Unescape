@@ -12,7 +12,7 @@ version v0.0.3
     print String::Unescape->unescape('\t\c@\x41\n');
 
     # Call as function
-    use String::Escape qw(unescape);
+    use String::Unescape qw(unescape);
     print unescape('\t\c@\x41\n');
 
 # DESCRIPTION
