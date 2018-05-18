@@ -152,7 +152,7 @@ __END__
   print String::Unescape->unescape('\t\c@\x41\n');
 
   # Call as function
-  use String::Escape qw(unescape);
+  use String::Unescape qw(unescape);
   print unescape('\t\c@\x41\n');
 
 =head1 DESCRIPTION
