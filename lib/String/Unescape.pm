@@ -6,8 +6,7 @@ use warnings;
 
 # ABSTRACT: Unescape perl-escaped string
 # VERSION
-
-require Exporter;
+use Exporter 'import';
 our (@EXPORT_OK) = qw(unescape);
 
 use Carp;
